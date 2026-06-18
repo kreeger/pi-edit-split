@@ -48,20 +48,17 @@ When the tool is called, it reads the target file, applies the edits
 in-memory to generate a diff, and renders a live preview. The actual
 file modification is delegated to pi's original edit tool execution.
 
-Three rendering modes adapt to terminal width:
+Two rendering modes adapt to terminal width:
 
 - **Split view** (width >= 120): Side-by-side old/new with a vertical
   divider. Each cell shows line numbers and content.
-- **Unified diff** (width >= 80): Standard unified format, delegated
-  to pi's built-in `renderDiff`.
-- **Compact mode** (narrower): Minimal output with `+`/`-`/` ` prefixes
-  and line numbers.
+- **Unified diff** (narrower): Standard unified format, delegated to
+  pi's built-in `renderDiff`.
 
 ## Features
 
 - **Side-by-side diff** — split view when terminal width >= 120 chars
-- **Unified diff** — standard unified format when width >= 80 chars
-- **Compact mode** — minimal output for narrow terminals
+- **Unified diff** — standard unified format on narrower screens
 - **Fuzzy matching** — normalizes typographic quotes, dashes, and
   spaces for more reliable text matching
 - **BOM handling** — strips UTF-8 BOM before processing

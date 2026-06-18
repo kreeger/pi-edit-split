@@ -22,7 +22,7 @@ interface RowEntry {
 type DiffEntry = HeaderEntry | RowEntry;
 
 const MAX_EXPANDED_LINES = 50;
-const MAX_COLLAPSED_LINES = 7;
+const MAX_COLLAPSED_DIFF_LINES = 7;
 const TAB_WIDTH = 4;
 
 function expandTabs(text: string): string {
@@ -63,17 +63,6 @@ function cellLine(cell: SplitCell | null, width: number, theme: Theme): string {
 	return padVisible(`${lineNum} │ ${content}`, width);
 }
 
-function compactLine(cell: SplitCell, width: number, theme: Theme): string {
-	const prefix = cell.type === "add" ? "+" : cell.type === "remove" ? "-" : " ";
-	let text = `${prefix} ${expandTabs(cell.content)}`;
-
-	if (cell.type === "add") text = theme.fg("toolDiffAdded", text);
-	else if (cell.type === "remove") text = theme.fg("toolDiffRemoved", text);
-	else text = theme.fg("toolDiffContext", text);
-
-	return truncateToWidth(text, width, "…");
-}
-
 function patchFromHunks(hunks: ParsedHunk[]): string {
 	const lines: string[] = [];
 	for (const hunk of hunks) {
@@ -103,12 +92,11 @@ export class DiffRenderer implements Component {
 
 	render(width: number): string[] {
 		if (width >= 120) return this.renderSplit(width);
-		if (width >= 80) return this.renderUnified(width);
-		return this.renderCompact(width);
+		return this.renderUnified(width);
 	}
 
 	private maxLines(): number {
-		return this.options.expanded ? MAX_EXPANDED_LINES : MAX_COLLAPSED_LINES;
+		return this.options.expanded ? MAX_EXPANDED_LINES : MAX_COLLAPSED_DIFF_LINES;
 	}
 
 	private entriesForHunks(): DiffEntry[] {
@@ -185,25 +173,5 @@ export class DiffRenderer implements Component {
 		const hidden = Math.max(0, rendered.length - shown.length);
 		if (hidden > 0) shown.push(this.hiddenNotice(hidden, width));
 		return shown.map((line) => truncateToWidth(line, width, ""));
-	}
-
-	private renderCompact(width: number): string[] {
-		const lines: string[] = [];
-		const { shown, hidden } = this.truncateEntries(this.entriesForHunks());
-
-		for (const entry of shown) {
-			if (entry.kind === "header") {
-				lines.push(truncateToWidth(this.theme.fg("dim", entry.header), width, "…"));
-				continue;
-			}
-
-			if (entry.row.left) lines.push(compactLine(entry.row.left, width, this.theme));
-			if (entry.row.right && entry.row.right !== entry.row.left) {
-				lines.push(compactLine(entry.row.right, width, this.theme));
-			}
-		}
-
-		if (hidden > 0) lines.push(this.hiddenNotice(hidden, width));
-		return lines.map((line) => truncateToWidth(line, width, ""));
 	}
 }
