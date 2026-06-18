@@ -12,12 +12,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kreeger/pi-edit-split.git"
+    "url": "git+https://github.com/kreeger/pi-edit-split.git"
   },
   "license": "MIT",
   "author": "Ben Kreeger",
   "pi": {
-    "extensions": ["./src/index.ts"]
+    "extensions": [
+      "./src/index.ts"
+    ]
   },
   "type": "module",
   "main": "src/index.ts",
