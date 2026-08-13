@@ -6,11 +6,11 @@ reviewed and merged.
 
 ## Getting started
 
-1. Fork the [repository](https://git.kree.gr/kreeger/pi-edit-split) on
-   git.kree.gr.
+1. Fork the [repository](https://github.com/kreeger/pi-edit-split) on
+   GitHub.
 2. Clone your fork:
    ```bash
-   git clone https://git.kree.gr/YOUR_USERNAME/pi-edit-split.git
+   git clone git@github.com:YOUR_USERNAME/pi-edit-split.git
    cd pi-edit-split
    ```
 3. Install dependencies:
