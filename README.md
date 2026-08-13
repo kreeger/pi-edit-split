@@ -70,7 +70,7 @@ Two rendering modes adapt to terminal width:
 Install from the git repository using `pi install`:
 
 ```bash
-pi install git@github.com:kreeger/pi-edit-split.git
+pi install https://git.kree.gr/kreeger/pi-edit-split.git
 ```
 
 Pass the repository URL directly as a single argument.
@@ -106,7 +106,7 @@ drop-in replacement for the built-in edit tool renderer.
 Clone the repository and install dependencies:
 
 ```bash
-git clone git@github.com:kreeger/pi-edit-split.git
+git clone https://git.kree.gr/kreeger/pi-edit-split.git
 cd pi-edit-split
 npm install
 ```
