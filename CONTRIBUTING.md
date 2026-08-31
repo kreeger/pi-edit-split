@@ -31,6 +31,22 @@ alongside source files (`.test.ts`). Run the full suite before pushing:
 npm test
 ```
 
+Use Conventional Commit prefixes such as `feat:`, `fix:`, and `docs:`.
+The release process uses these prefixes to generate `CHANGELOG.md` and
+recommend the next version.
+
+### Releasing
+
+Releases are run from a clean checkout with npm authentication configured:
+
+```bash
+npm run release -- --dry-run
+npm run release
+```
+
+The release command runs tests, generates the changelog, bumps the package
+version, creates and pushes a `v${version}` tag, and publishes to npm.
+
 ## Submitting changes
 
 1. Create a feature branch from `main`:

@@ -133,6 +133,24 @@ npm run deploy
 
 Restart your pi session to pick up changes.
 
+### Releasing
+
+Releases use `release-it` with Conventional Commits. The release command
+runs the test suite, updates `CHANGELOG.md`, bumps the package version,
+creates a `v${version}` Git tag, pushes the commit and tag, and publishes
+the package to npm.
+
+Ensure the working tree is clean and npm authentication is configured,
+then preview the release before running it:
+
+```bash
+npm run release -- --dry-run
+npm run release
+```
+
+Use commit prefixes such as `feat:`, `fix:`, and `docs:` so the changelog
+can classify changes and determine the recommended version bump.
+
 ### Architecture notes
 
 - `index.ts` — Extension entry point. Wraps pi's `edit` tool, wires up
