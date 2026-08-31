@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Expanded diff view now renders every diff row instead of capping at 50 lines.
+
 ## [0.1.0] — 2026-06-18
 
 ### Added
