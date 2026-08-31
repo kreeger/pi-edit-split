@@ -2,7 +2,7 @@
 
 <!--
 Describe what this PR changes and why. If it fixes an issue, reference
-it with "Fixes #123".
+its path, for example `docs/issues/123-short-description.md`.
 -->
 
 ## Checklist
@@ -10,7 +10,8 @@ it with "Fixes #123".
 - [ ] Tests pass locally (`npm test`)
 - [ ] New features include test coverage
 - [ ] README updated if behaviour or configuration changed
-- [ ] Commit messages use a Conventional Commit prefix (`feat:`, `fix:`, `docs:`, etc.)
+- [ ] Commit messages use a Conventional Commit prefix (`feat:`, `fix:`,
+      `docs:`, etc.)
 
 ## Notes for reviewers
 
