@@ -14,6 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/kreeger/pi-edit-split.git"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "license": "MIT",
   "author": "Ben Kreeger",
   "pi": {
@@ -25,10 +29,13 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "vitest run",
-    "deploy": "tsx src/_helpers/install.ts"
+    "deploy": "tsx src/_helpers/install.ts",
+    "release": "release-it"
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "^12.0.0",
     "@types/node": "^25.6.0",
+    "release-it": "^21.0.2",
     "typescript": "^6.0.3",
     "vitest": "^3.0.0"
   },

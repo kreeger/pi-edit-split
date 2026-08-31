@@ -10,7 +10,7 @@ it with "Fixes #123".
 - [ ] Tests pass locally (`npm test`)
 - [ ] New features include test coverage
 - [ ] README updated if behaviour or configuration changed
-- [ ] CHANGELOG.md entry added under "Unreleased"
+- [ ] Commit messages use a Conventional Commit prefix (`feat:`, `fix:`, `docs:`, etc.)
 
 ## Notes for reviewers
 
