@@ -21,7 +21,6 @@ interface RowEntry {
 
 type DiffEntry = HeaderEntry | RowEntry;
 
-const MAX_EXPANDED_LINES = 50;
 const MAX_COLLAPSED_DIFF_LINES = 7;
 const TAB_WIDTH = 4;
 
@@ -95,8 +94,8 @@ export class DiffRenderer implements Component {
 		return this.renderUnified(width);
 	}
 
-	private maxLines(): number {
-		return this.options.expanded ? MAX_EXPANDED_LINES : MAX_COLLAPSED_DIFF_LINES;
+	private maxLines(total: number): number {
+		return this.options.expanded ? total : MAX_COLLAPSED_DIFF_LINES;
 	}
 
 	private entriesForHunks(): DiffEntry[] {
@@ -109,7 +108,7 @@ export class DiffRenderer implements Component {
 	}
 
 	private truncateEntries(entries: DiffEntry[]): { shown: DiffEntry[]; hidden: number } {
-		const maxLines = this.maxLines();
+		const maxLines = this.maxLines(entries.length);
 		if (entries.length <= maxLines) return { shown: entries, hidden: 0 };
 
 		const firstChange = entries.findIndex((entry) =>
@@ -168,7 +167,7 @@ export class DiffRenderer implements Component {
 			rendered = source.split("\n").map((line) => this.theme.fg("toolDiffContext", line));
 		}
 
-		const maxLines = this.maxLines();
+		const maxLines = this.maxLines(rendered.length);
 		const shown = rendered.slice(0, maxLines).map((line) => truncateToWidth(line, width, "…"));
 		const hidden = Math.max(0, rendered.length - shown.length);
 		if (hidden > 0) shown.push(this.hiddenNotice(hidden, width));

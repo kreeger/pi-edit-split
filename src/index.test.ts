@@ -37,6 +37,13 @@ const patch = [
 	"+new",
 ].join("\n");
 
+const longPatch = [
+	"--- a/file.ts",
+	"+++ b/file.ts",
+	"@@ -1,55 +1,55 @@",
+	...Array.from({ length: 55 }, (_, index) => ` context ${index + 1}`),
+].join("\n");
+
 describe("pi-edit-split rendering", () => {
 	it("adds top and bottom padding around completed output", () => {
 		const tool = registeredEditTool();
@@ -77,6 +84,39 @@ describe("pi-edit-split rendering", () => {
 		expect(lines).toContain("new value");
 		expect(lines).toContain("line six");
 		expect(lines).toContain("line seven");
+	});
+
+	it("renders every diff row in expanded split view", () => {
+		const preview = previewFromPatch(longPatch);
+		const component = new DiffRenderer(preview, theme(), { expanded: true });
+
+		const output = component.render(120).join("\n");
+
+		expect(output).toContain("context 55");
+		expect(output).not.toContain("lines hidden");
+	});
+
+	it("keeps compact split view truncated", () => {
+		const preview = previewFromPatch(longPatch);
+		const component = new DiffRenderer(preview, theme(), { expanded: false });
+
+		const output = component.render(120).join("\n");
+
+		expect(output).not.toContain("context 55");
+		expect(output).toContain("lines hidden");
+	});
+
+	it("renders every unified diff line in expanded view", () => {
+		const preview = previewFromPatch(longPatch);
+		const component = new DiffRenderer(preview, theme(), {
+			expanded: true,
+			diffText: longPatch,
+		});
+
+		const output = component.render(80).join("\n");
+
+		expect(output).toContain("context 55");
+		expect(output).not.toContain("lines hidden");
 	});
 
 	it("normalizes tabs in split output", () => {
