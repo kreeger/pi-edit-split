@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DiffRenderer } from "./diff-component.js";
-import extension from "./index.js";
+import extension, { alwaysShowFullDiff } from "./index.js";
 import { pairLines } from "./pairing.js";
 import { countPatchLines, parseUnifiedPatch } from "./patch-parser.js";
 import type { PreviewResult } from "./types.js";
@@ -43,6 +43,35 @@ const longPatch = [
 	"@@ -1,55 +1,55 @@",
 	...Array.from({ length: 55 }, (_, index) => ` context ${index + 1}`),
 ].join("\n");
+
+describe("pi-edit-split settings", () => {
+	it("reads the global alwaysShowFullDiff setting", () => {
+		const settings = {
+			getGlobalSettings: () => ({ piEditSplit: { alwaysShowFullDiff: true } }),
+			getProjectSettings: () => ({}),
+		};
+
+		expect(alwaysShowFullDiff(settings)).toBe(true);
+	});
+
+	it("defaults alwaysShowFullDiff to false", () => {
+		expect(
+			alwaysShowFullDiff({
+				getGlobalSettings: () => ({}),
+				getProjectSettings: () => ({}),
+			}),
+		).toBe(false);
+	});
+
+	it("allows project settings to override the global setting", () => {
+		const settings = {
+			getGlobalSettings: () => ({ piEditSplit: { alwaysShowFullDiff: true } }),
+			getProjectSettings: () => ({ piEditSplit: { alwaysShowFullDiff: false } }),
+		};
+
+		expect(alwaysShowFullDiff(settings)).toBe(false);
+	});
+});
 
 describe("pi-edit-split rendering", () => {
 	it("adds top and bottom padding around completed output", () => {
@@ -104,6 +133,18 @@ describe("pi-edit-split rendering", () => {
 
 		expect(output).not.toContain("context 55");
 		expect(output).toContain("lines hidden");
+	});
+
+	it("renders every diff row when full output is configured", () => {
+		const preview = previewFromPatch(longPatch);
+		const component = new DiffRenderer(preview, theme(), {
+			alwaysShowFullDiff: true,
+		});
+
+		const output = component.render(120).join("\n");
+
+		expect(output).toContain("context 55");
+		expect(output).not.toContain("lines hidden");
 	});
 
 	it("renders every unified diff line in expanded view", () => {

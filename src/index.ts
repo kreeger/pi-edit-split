@@ -2,6 +2,7 @@ import {
 	createEditTool,
 	createEditToolDefinition,
 	renderDiff,
+	SettingsManager,
 	type ExtensionAPI,
 	type Theme,
 } from "@earendil-works/pi-coding-agent";
@@ -21,6 +22,25 @@ interface EditDetails {
 	diff?: string;
 	patch?: string;
 	firstChangedLine?: number;
+}
+
+interface PiEditSplitSettings {
+	piEditSplit?: {
+		alwaysShowFullDiff?: boolean;
+	};
+}
+
+interface SettingsSource {
+	getGlobalSettings(): PiEditSplitSettings;
+	getProjectSettings(): PiEditSplitSettings;
+}
+
+export function alwaysShowFullDiff(settingsManager: SettingsSource): boolean {
+	const globalSettings = settingsManager.getGlobalSettings();
+	const projectSettings = settingsManager.getProjectSettings();
+	const projectValue = projectSettings.piEditSplit?.alwaysShowFullDiff;
+	if (typeof projectValue === "boolean") return projectValue;
+	return globalSettings.piEditSplit?.alwaysShowFullDiff === true;
 }
 
 function isRenderableArgs(args: EditArgs): args is { path: string; edits: EditInputBlock[] } {
@@ -95,6 +115,7 @@ function fallbackUnified(diff: string, theme: Theme): Component {
 
 export default function (pi: ExtensionAPI) {
 	const base = createEditToolDefinition(process.cwd());
+	const showFullDiff = alwaysShowFullDiff(SettingsManager.create(process.cwd()));
 
 	pi.registerTool({
 		...base,
@@ -138,6 +159,7 @@ export default function (pi: ExtensionAPI) {
 				out.addChild(
 					new DiffRenderer(state.preview, theme, {
 						expanded: context.expanded,
+						alwaysShowFullDiff: showFullDiff,
 						diffText: state.preview.diff,
 					}),
 				);
@@ -165,6 +187,7 @@ export default function (pi: ExtensionAPI) {
 				out.addChild(
 					new DiffRenderer(preview, theme, {
 						expanded: options.expanded,
+						alwaysShowFullDiff: showFullDiff,
 						diffText: details.diff,
 					}),
 				);
