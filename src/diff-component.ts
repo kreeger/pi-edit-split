@@ -6,6 +6,7 @@ import type { ParsedHunk, PreviewResult, SplitCell, SplitRow } from "./types.ts"
 
 export interface DiffRendererOptions {
 	expanded?: boolean;
+	alwaysShowFullDiff?: boolean;
 	diffText?: string;
 }
 
@@ -95,7 +96,9 @@ export class DiffRenderer implements Component {
 	}
 
 	private maxLines(total: number): number {
-		return this.options.expanded ? total : MAX_COLLAPSED_DIFF_LINES;
+		return this.options.expanded || this.options.alwaysShowFullDiff
+			? total
+			: MAX_COLLAPSED_DIFF_LINES;
 	}
 
 	private entriesForHunks(): DiffEntry[] {
